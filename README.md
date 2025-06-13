@@ -40,8 +40,8 @@ Script này thực hiện việc gỡ bỏ **hoàn toàn** Google Chrome khỏi 
 1. **Tải về script**
 
     ```bash
-    git clone https://github.com/your-username/remove_chrome_cmd_script.git
-    cd remove_chrome_cmd_script
+    git clone https://github.com/ocampoje17/remove_chrome_win_cmd_script.git
+    cd remove_chrome_win_cmd_script
     ```
 
 2. **Chạy với quyền Administrator**
