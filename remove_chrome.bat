@@ -46,19 +46,25 @@ taskkill /f /im GoogleCrashHandler64.exe 2>nul
 timeout /t 3 /nobreak >nul
 
 echo [2/8] Attempting standard uninstall...
-REM Try common Chrome uninstall paths directly
+REM Try common Chrome uninstall paths directly with timeout
 if exist "C:\Program Files\Google\Chrome\Application\chrome.exe" (
-    echo Found Chrome installation in Program Files
-    "C:\Program Files\Google\Chrome\Application\chrome.exe" --uninstall --force-uninstall 2>nul
+    echo Found Chrome installation in Program Files - attempting uninstall...
+    start /wait /b timeout /t 30 /nobreak >nul 2>&1 & "C:\Program Files\Google\Chrome\Application\chrome.exe" --uninstall --force-uninstall --system-level 2>nul
+    timeout /t 5 /nobreak >nul
 )
 
 if exist "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" (
-    echo Found Chrome installation in Program Files (x86)
-    "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --uninstall --force-uninstall 2>nul
+    echo Found Chrome installation in Program Files x86 - attempting uninstall...
+    start /wait /b timeout /t 30 /nobreak >nul 2>&1 & "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --uninstall --force-uninstall --system-level 2>nul
+    timeout /t 5 /nobreak >nul
 )
 
-REM Try using Windows uninstaller
-wmic product where "name like 'Google Chrome'" call uninstall /nointeractive 2>nul
+REM Kill any hanging uninstaller processes
+taskkill /f /im "Installer.exe" 2>nul
+taskkill /f /im "setup.exe" 2>nul
+taskkill /f /im "GoogleChromeStandaloneEnterprise*.exe" 2>nul
+
+echo Standard uninstall attempt completed, continuing with manual removal...
 
 echo [3/8] Removing Google Update Service...
 REM Stop Google Update services
